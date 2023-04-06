@@ -15,7 +15,7 @@ let elTemplate = document.querySelector("[data-countries-template]");
 let elTemplateAbout = document.querySelector("[data-template]");
 let darkMode = document.querySelector("[data-dark-mode]");
 let lightMode = document.querySelector("[data-light-mode]");
-
+let selectRegion = document.querySelector('[data-select-region]');
 
 loadingFirst();
 async function loadingFirst() {
@@ -102,10 +102,33 @@ document.body.addEventListener("click", (evt) => {
   modalOpenModal(evt);
 });
 
+selectRegion.addEventListener('change', evt=>{
+  searchCountriesRegion(selectRegion.value)
+})
+
 async function searchCountries(value) {
   try {
     if(value !== "all"){
       let response = await fetch(`${apiKey}name/${value}`);
+      let result = await response.json();
+      renderCountries(result);
+      console.log(result);
+    }
+    if(value === "all"){
+      let response = await fetch(`${apiKey}${value}`);
+      let result = await response.json();
+      renderCountries(result);
+      console.log(result);
+    }
+  } catch (error) {
+    renderE(error);
+  }
+}
+
+async function searchCountriesRegion(value) {
+  try {
+    if(value !== "all"){
+      let response = await fetch(`${apiKey}region/${value}`);
       let result = await response.json();
       renderCountries(result);
       console.log(result);
